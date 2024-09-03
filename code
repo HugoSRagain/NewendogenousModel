@@ -1,0 +1,34 @@
+# Load necessary libraries
+library(plotly)
+
+# Define model parameters
+alpha <- 0.3
+beta <- 0.4
+gamma <- 0.3
+A <- 1
+
+# Generate a grid of values for H and S
+H_values <- seq(0.1, 5, by = 0.2)
+S_values <- seq(0.1, 5, by = 0.2)
+K_fixed <- 1  # Fix physical capital K for simplicity
+
+# Create matrices for H and S
+H_matrix <- matrix(rep(H_values, each = length(S_values)), nrow = length(S_values), ncol = length(H_values))
+S_matrix <- matrix(rep(S_values, times = length(H_values)), nrow = length(S_values), ncol = length(H_values))
+
+# Calculate output for each combination of H and S
+Y_matrix <- A * (K_fixed^alpha) * (H_matrix^beta) * (S_matrix^gamma)
+
+# Plot the 3D surface
+fig <- plot_ly(x = ~H_values, y = ~S_values, z = ~Y_matrix, type = "surface", colors = colorRamp(c("blue", "green", "yellow", "red"))) %>%
+  layout(
+    title = "Production Surface as a Function of Human and Social Capital",
+    scene = list(
+      xaxis = list(title = "Human Capital (H)"),
+      yaxis = list(title = "Social Capital (S)"),
+      zaxis = list(title = "Output (Y)")
+    )
+  )
+
+# Display the plot
+fig
